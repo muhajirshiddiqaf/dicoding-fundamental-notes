@@ -1,9 +1,5 @@
 const { Pool } = require('pg');
-const { nanoid } = require('nanoid');
-const bcrypt = require('bcrypt');
 const InvariantError = require('../../exceptions/InvariantError');
-const { mapDBToModel } = require('../../utils');
-const NotFoundError = require('../../exceptions/NotFoundError');
 
 class AuthenticationsService {
   constructor() {
@@ -33,6 +29,8 @@ class AuthenticationsService {
   }
 
   async deleteRefreshToken(token) {
+    await this.verifyRefreshToken(token);
+
     const query = {
       text: 'DELETE FROM authentications WHERE token = $1',
       values: [token],

@@ -24,10 +24,10 @@ class UsersService {
       text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
       values: [id, username, hashedPassword, fullname, createdAt, updatedAt],
     };
- 
+
     const result = await this._pool.query(query);
- 
-    if (!result.rows[0].id) {
+
+    if (!result.rows.length) {
       throw new InvariantError('User gagal ditambahkan');
     }
  
@@ -43,7 +43,7 @@ class UsersService {
     const result = await this._pool.query(query);
  
     if (result.rows.length > 0) {
-      throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.')
+      throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.');
     }
   }
 
